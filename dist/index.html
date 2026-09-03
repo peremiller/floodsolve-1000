@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore 1,000 adaptable flood-risk solutions across major flood mechanisms, settings, scales, costs, and implementation horizons."
+    />
+    <meta name="theme-color" content="#071d2b" />
+    <title>FloodSolve 1000 — Global Flood Solutions Atlas</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#solutions">Skip to solutions</a>
+
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="FloodSolve 1000 home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>
+          <strong>FloodSolve</strong>
+          <small>GLOBAL ATLAS / 1000</small>
+        </span>
+      </a>
+      <button class="method-button" id="methodButton" type="button" aria-haspopup="dialog">
+        How to use this atlas
+      </button>
+    </header>
+
+    <main id="top">
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow">From headwaters to recovery</p>
+          <h1 id="page-title">1,000 ways to reduce flood risk.</h1>
+          <p>
+            Fifty proven intervention strategies adapted across twenty flood-prone settings—built for planners,
+            engineers, communities, and decision-makers worldwide.
+          </p>
+        </div>
+        <div class="atlas-stats" aria-label="Atlas coverage">
+          <div><strong>1,000</strong><span>solutions</span></div>
+          <div><strong>50</strong><span>strategies</span></div>
+          <div><strong>20</strong><span>settings</span></div>
+          <div><strong>8</strong><span>flood types</span></div>
+        </div>
+      </section>
+
+      <section class="pathway" aria-label="Flood resilience pathway">
+        <span>Understand</span><span>Predict</span><span>Prevent</span><span>Store</span><span>Move</span><span>Protect</span><span>Recover</span>
+      </section>
+
+      <section class="explorer" aria-labelledby="explorer-title">
+        <div class="explorer-heading">
+          <div>
+            <p class="eyebrow">Solution explorer</p>
+            <h2 id="explorer-title">Find the right intervention</h2>
+          </div>
+          <button class="reset-button" id="resetButton" type="button">Reset filters</button>
+        </div>
+
+        <div class="search-row">
+          <label class="search-control">
+            <span class="sr-only">Search solutions</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+            <input id="searchInput" type="search" placeholder="Search strategies, places, risks, or actions…" autocomplete="off" />
+            <kbd>/</kbd>
+          </label>
+          <label class="select-control">
+            <span>Sort</span>
+            <select id="sortSelect">
+              <option value="library">Library order</option>
+              <option value="fastest">Fastest to start</option>
+              <option value="lowest">Lowest cost first</option>
+              <option value="az">A–Z</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="filters" aria-label="Solution filters">
+          <label><span>Flood type</span><select id="floodFilter"><option value="all">All flood types</option></select></label>
+          <label><span>Setting</span><select id="settingFilter"><option value="all">All settings</option></select></label>
+          <label><span>Category</span><select id="categoryFilter"><option value="all">All categories</option></select></label>
+          <label><span>Approach</span><select id="approachFilter"><option value="all">All approaches</option></select></label>
+          <label><span>Cost</span><select id="costFilter"><option value="all">All cost bands</option></select></label>
+          <label><span>Horizon</span><select id="horizonFilter"><option value="all">Any horizon</option></select></label>
+        </div>
+      </section>
+
+      <section class="results" id="solutions" aria-labelledby="results-title">
+        <div class="results-heading">
+          <div>
+            <h2 id="results-title"><span id="resultCount">1,000</span> solutions</h2>
+            <p id="resultSummary">Showing the complete global atlas</p>
+          </div>
+          <div class="view-toggle" role="group" aria-label="Results view">
+            <button class="active" id="gridView" type="button" aria-pressed="true">Grid</button>
+            <button id="listView" type="button" aria-pressed="false">List</button>
+          </div>
+        </div>
+
+        <div class="solution-grid" id="solutionGrid" aria-live="polite"></div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <strong>No solutions match those filters.</strong>
+          <p>Try removing one filter or searching with a broader term.</p>
+          <button type="button" id="emptyReset">Show all 1,000 solutions</button>
+        </div>
+
+        <nav class="pagination" id="pagination" aria-label="Solution pages"></nav>
+      </section>
+    </main>
+
+    <footer>
+      <div>
+        <strong>FloodSolve 1000</strong>
+        <p>A decision-starting library—not a substitute for local hydrology, engineering, environmental review, or community consent.</p>
+      </div>
+      <p>Every intervention should be adapted, modeled, maintained, and monitored locally.</p>
+    </footer>
+
+    <dialog class="solution-dialog" id="solutionDialog">
+      <button class="dialog-close" id="dialogClose" type="button" aria-label="Close solution details">×</button>
+      <div id="dialogContent"></div>
+    </dialog>
+
+    <dialog class="method-dialog" id="methodDialog">
+      <button class="dialog-close" id="methodClose" type="button" aria-label="Close">×</button>
+      <p class="eyebrow">Method</p>
+      <h2>How the 1,000 solutions are built</h2>
+      <p>
+        The atlas combines 50 distinct flood-risk strategies with 20 representative physical and social settings.
+        Each pairing becomes a tailored implementation brief with actions, cautions, likely leaders, cost, timing, and a success measure.
+      </p>
+      <div class="method-grid">
+        <div><strong>1. Find your hazard</strong><span>Filter by river, rain, coast, flash, compound, snowmelt, glacial-lake, or infrastructure-failure flooding.</span></div>
+        <div><strong>2. Match your setting</strong><span>Choose the closest settlement, watershed, coastal, agricultural, or critical-facility context.</span></div>
+        <div><strong>3. Build a portfolio</strong><span>Combine actions across prevention, protection, preparedness, and recovery; no single measure is enough.</span></div>
+        <div><strong>4. Validate locally</strong><span>Use local flood models, lifecycle costs, ecological review, and meaningful community participation before implementation.</span></div>
+      </div>
+    </dialog>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
