@@ -1,0 +1,34 @@
+name: FloodSolve regression and release readiness
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dist/**'
+      - 'tests/**'
+      - 'package.json'
+      - '.github/workflows/floodsolve-ci.yml'
+  pull_request:
+    paths:
+      - 'dist/**'
+      - 'tests/**'
+      - 'package.json'
+      - '.github/workflows/floodsolve-ci.yml'
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test and build static atlas
+        run: npm run build
+      - name: Verify production artifact
+        run: |
+          test -s dist/index.html
+          test -s dist/app.js
+          test -s dist/styles.css
+          test -s dist/favicon.svg
