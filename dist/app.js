@@ -324,8 +324,9 @@ function openSolution(id, updateUrl = true) {
       <p>${item.metric}.</p>
     </section>
   `;
-  elements.dialog.showModal();
-  if (updateUrl) history.replaceState(null, "", `#${item.id}`);
+  if (!elements.dialog.open) elements.dialog.showModal();
+  // A distinct history entry makes each brief navigable with Back/Forward.
+  if (updateUrl && location.hash !== `#${item.id}`) history.pushState({ floodsolveSolution: item.id }, "", `#${item.id}`);
 }
 
 function closeSolution() {
@@ -387,13 +388,25 @@ elements.listView.addEventListener("click", () => {
 
 document.addEventListener("keydown", (event) => {
   const tag = document.activeElement?.tagName;
-  if (event.key === "/" && tag !== "INPUT" && tag !== "SELECT" && tag !== "TEXTAREA") {
+  if (event.key === "/" && !event.ctrlKey && !event.metaKey && !event.altKey && !elements.dialog.open && !elements.methodDialog.open && tag !== "INPUT" && tag !== "SELECT" && tag !== "TEXTAREA") {
     event.preventDefault();
     elements.search.focus();
   }
 });
 
-render();
+function syncSolutionFromLocation() {
+  const linkedId = location.hash.slice(1).toUpperCase();
+  if (/^FS-\d{4}$/.test(linkedId)) {
+    if (solutions.some((item) => item.id === linkedId)) {
+      openSolution(linkedId, false);
+      return;
+    }
+  }
+  // Closing after browser navigation must not rewrite the history entry.
+  if (elements.dialog.open) elements.dialog.close();
+}
 
-const linkedId = location.hash.slice(1).toUpperCase();
-if (/^FS-\d{4}$/.test(linkedId)) openSolution(linkedId, false);
+window.addEventListener("popstate", syncSolutionFromLocation);
+window.addEventListener("hashchange", syncSolutionFromLocation);
+render();
+syncSolutionFromLocation();
