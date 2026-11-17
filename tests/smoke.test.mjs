@@ -49,7 +49,7 @@ test('search keyboard shortcut does not steal focus from open dialogs or modifie
 
 
 test('pagination activation retains keyboard focus and honors reduced-motion preference', () => {
-  const source = app.match(/function changePage\\(page\\) \\{[\\s\\S]*?\\n\\}/)?.[0];
+  const source = app.match(/function changePage\(page\) \{[\s\S]*?\n\}/)?.[0];
   assert.ok(source, 'test must exercise the actual changePage implementation');
   for (const keyboard of [true, false]) {
     for (const reducedMotion of [true, false]) {
