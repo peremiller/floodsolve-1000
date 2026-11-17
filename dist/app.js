@@ -283,9 +283,15 @@ function render() {
 }
 
 function changePage(page) {
+  // Re-rendering pagination removes the activated button: restore keyboard focus.
+  const paginationHadFocus = elements.pagination.contains(document.activeElement);
   currentPage = page;
   render();
-  document.getElementById("solutions").scrollIntoView({ behavior: "smooth", block: "start" });
+  if (paginationHadFocus) {
+    elements.pagination.querySelector('[aria-current="page"]')?.focus({ preventScroll: true });
+  }
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+  document.getElementById("solutions").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
 }
 
 function openSolution(id, updateUrl = true) {
