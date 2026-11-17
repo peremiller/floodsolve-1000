@@ -46,7 +46,14 @@ try {
       await page.evaluate(() => localStorage.setItem('primeqe-existing', 'do-not-change'));
       assert.equal(await page.locator('.solution-card').count(), 24);
       assert.equal(await page.locator('#resultCount').textContent(), '1,000');
-      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true, 'horizontal overflow at ' + width);
+      const overflow = await page.evaluate(() => ({
+        viewport: innerWidth,
+        documentWidth: document.documentElement.scrollWidth,
+        offenders: [...document.querySelectorAll('body *')]
+          .filter(el => el.getBoundingClientRect().right > innerWidth + 1 && getComputedStyle(el).overflowX !== 'auto')
+          .slice(0, 12).map(el => ({ tag: el.tagName, cls: el.className, right: Math.round(el.getBoundingClientRect().right) }))
+      }));
+      assert.ok(overflow.documentWidth <= overflow.viewport + 1, 'horizontal overflow ' + JSON.stringify(overflow));
       const prev = page.getByRole('button', { name: 'Previous page' });
       assert.equal(await prev.isDisabled(), true);
       const next = page.getByRole('button', { name: 'Next page' });
