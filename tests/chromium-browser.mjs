@@ -61,7 +61,9 @@ try {
       await page.keyboard.press('Enter');
       assert.equal((await page.locator('#pagination [aria-current="page"]').textContent()).trim(), '2');
       assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('aria-label')), 'Page 2', 'focus lost on pagination redraw');
-      assert.equal(await page.locator('#resultSummary').textContent(), 'Showing the complete global atlas');
+      assert.equal(await page.locator('#resultSummary').textContent(), 'Showing the complete global atlas · page 2 of 42');
+      assert.equal(await page.locator('#resultSummary').getAttribute('role'), 'status');
+      assert.equal(await page.locator('#solutionGrid').getAttribute('aria-live'), null, 'avoid announcing all 24 cards on each page change');
       await page.locator('#listView').click();
       assert.equal(await page.locator('#listView').getAttribute('aria-pressed'), 'true');
       await page.locator('#gridView').click();
