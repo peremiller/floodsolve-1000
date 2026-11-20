@@ -274,7 +274,7 @@ function render() {
     .filter((select) => select.value !== "all").length + (elements.search.value.trim() ? 1 : 0);
   elements.summary.textContent = activeFilters
     ? `${activeFilters} active ${activeFilters === 1 ? "filter" : "filters"} · page ${currentPage} of ${totalPages}`
-    : "Showing the complete global atlas";
+    : `Showing the complete global atlas · page ${currentPage} of ${totalPages}`;
 
   elements.grid.replaceChildren(...pageItems.map(makeCard));
   elements.empty.hidden = filtered.length !== 0;
