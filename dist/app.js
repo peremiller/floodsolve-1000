@@ -274,7 +274,7 @@ function render() {
     .filter((select) => select.value !== "all").length + (elements.search.value.trim() ? 1 : 0);
   elements.summary.textContent = activeFilters
     ? `${activeFilters} active ${activeFilters === 1 ? "filter" : "filters"} · page ${currentPage} of ${totalPages}`
-    : "Showing the complete global atlas";
+    : `Showing the complete global atlas · page ${currentPage} of ${totalPages}`;
 
   elements.grid.replaceChildren(...pageItems.map(makeCard));
   elements.empty.hidden = filtered.length !== 0;
@@ -283,9 +283,15 @@ function render() {
 }
 
 function changePage(page) {
+  // Re-rendering pagination removes the activated button: restore keyboard focus.
+  const paginationHadFocus = elements.pagination.contains(document.activeElement);
   currentPage = page;
   render();
-  document.getElementById("solutions").scrollIntoView({ behavior: "smooth", block: "start" });
+  if (paginationHadFocus) {
+    elements.pagination.querySelector('[aria-current="page"]')?.focus({ preventScroll: true });
+  }
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+  document.getElementById("solutions").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
 }
 
 function openSolution(id, updateUrl = true) {
@@ -294,7 +300,7 @@ function openSolution(id, updateUrl = true) {
   elements.dialogContent.innerHTML = `
     <div class="detail-hero">
       <p class="eyebrow">${item.id} · ${item.category}</p>
-      <h2>${item.title}</h2>
+      <h2 id="solutionTitle">${item.title}</h2>
       <p>${item.summary}</p>
     </div>
     <div class="detail-grid" aria-label="Implementation profile">

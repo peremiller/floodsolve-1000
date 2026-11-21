@@ -46,3 +46,44 @@ test('search keyboard shortcut does not steal focus from open dialogs or modifie
   assert.match(app, /!elements\.dialog\.open && !elements\.methodDialog\.open/);
   assert.match(app, /!event\.ctrlKey && !event\.metaKey && !event\.altKey/);
 });
+
+
+test('pagination activation retains keyboard focus and honors reduced-motion preference', () => {
+  const source = app.match(/function changePage\(page\) \{[\s\S]*?\n\}/)?.[0];
+  assert.ok(source, 'test must exercise the actual changePage implementation');
+  for (const keyboard of [true, false]) {
+    for (const reducedMotion of [true, false]) {
+      const operations = [];
+      const previousButton = {};
+      const nextButton = { focus(options) { operations.push(['focus', options.preventScroll]); } };
+      const pagination = {
+        contains(node) { return node === previousButton; },
+        querySelector(selector) {
+          assert.equal(selector, '[aria-current="page"]');
+          return nextButton;
+        }
+      };
+      const document = {
+        activeElement: keyboard ? previousButton : {},
+        getElementById(id) {
+          assert.equal(id, 'solutions');
+          return { scrollIntoView(options) { operations.push(['scroll', options.behavior, options.block]); } };
+        }
+      };
+      const window = { matchMedia(query) {
+        assert.equal(query, '(prefers-reduced-motion: reduce)');
+        return { matches: reducedMotion };
+      } };
+      let renders = 0;
+      const changePage = new Function('elements', 'document', 'window', 'render', 'currentPage',
+        `${source}\nreturn changePage;`)(
+          { pagination }, document, window, () => { renders += 1; }, 1);
+      changePage(2);
+      assert.equal(renders, 1);
+      assert.deepEqual(operations, [
+        ...(keyboard ? [['focus', true]] : []),
+        ['scroll', reducedMotion ? 'auto' : 'smooth', 'start']
+      ]);
+    }
+  }
+});

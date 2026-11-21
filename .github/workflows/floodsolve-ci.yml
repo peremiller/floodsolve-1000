@@ -26,6 +26,12 @@ jobs:
           node-version: '22'
       - name: Test and build static atlas
         run: npm run build
+      - name: Install isolated browser driver
+        run: npm install --no-save --package-lock=false playwright-core@1.56.1
+      - name: Chromium interface and accessibility interaction smoke
+        run: |
+          test -x /usr/bin/google-chrome
+          node tests/chromium-browser.mjs
       - name: Verify production artifact
         run: |
           test -s dist/index.html

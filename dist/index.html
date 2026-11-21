@@ -91,7 +91,7 @@
         <div class="results-heading">
           <div>
             <h2 id="results-title"><span id="resultCount">1,000</span> solutions</h2>
-            <p id="resultSummary">Showing the complete global atlas</p>
+            <p id="resultSummary" role="status" aria-live="polite" aria-atomic="true">Showing the complete global atlas</p>
           </div>
           <div class="view-toggle" role="group" aria-label="Results view">
             <button class="active" id="gridView" type="button" aria-pressed="true">Grid</button>
@@ -99,7 +99,7 @@
           </div>
         </div>
 
-        <div class="solution-grid" id="solutionGrid" aria-live="polite"></div>
+        <div class="solution-grid" id="solutionGrid"></div>
 
         <div class="empty-state" id="emptyState" hidden>
           <strong>No solutions match those filters.</strong>
@@ -119,15 +119,15 @@
       <p>Every intervention should be adapted, modeled, maintained, and monitored locally.</p>
     </footer>
 
-    <dialog class="solution-dialog" id="solutionDialog">
+    <dialog class="solution-dialog" id="solutionDialog" aria-labelledby="solutionTitle">
       <button class="dialog-close" id="dialogClose" type="button" aria-label="Close solution details">×</button>
       <div id="dialogContent"></div>
     </dialog>
 
-    <dialog class="method-dialog" id="methodDialog">
+    <dialog class="method-dialog" id="methodDialog" aria-labelledby="methodTitle">
       <button class="dialog-close" id="methodClose" type="button" aria-label="Close">×</button>
       <p class="eyebrow">Method</p>
-      <h2>How the 1,000 solutions are built</h2>
+      <h2 id="methodTitle">How the 1,000 solutions are built</h2>
       <p>
         The atlas combines 50 distinct flood-risk strategies with 20 representative physical and social settings.
         Each pairing becomes a tailored implementation brief with actions, cautions, likely leaders, cost, timing, and a success measure.
