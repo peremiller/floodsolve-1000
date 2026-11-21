@@ -68,7 +68,13 @@ try {
       assert.equal(await page.locator('#listView').getAttribute('aria-pressed'), 'true');
       await page.locator('#gridView').click();
       assert.equal(await page.locator('#gridView').getAttribute('aria-pressed'), 'true');
+      await page.locator('#methodButton').click();
+      assert.equal(await page.getByRole('dialog', { name: 'How the 1,000 solutions are built' }).count(), 1, 'method dialog missing accessible title');
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#methodDialog').evaluate(el => el.open), false);
       await page.locator('.card-action').first().click();
+      const briefTitle = await page.locator('#solutionTitle').textContent();
+      assert.equal(await page.getByRole('dialog', { name: briefTitle }).count(), 1, 'solution dialog missing dynamic accessible title');
       assert.match(page.url(), /#FS-\d{4}$/);
       assert.equal(await page.locator('#solutionDialog').evaluate(el => el.open), true);
       const direct = page.url();
