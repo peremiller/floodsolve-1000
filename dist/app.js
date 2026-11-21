@@ -300,7 +300,7 @@ function openSolution(id, updateUrl = true) {
   elements.dialogContent.innerHTML = `
     <div class="detail-hero">
       <p class="eyebrow">${item.id} · ${item.category}</p>
-      <h2>${item.title}</h2>
+      <h2 id="solutionTitle">${item.title}</h2>
       <p>${item.summary}</p>
     </div>
     <div class="detail-grid" aria-label="Implementation profile">
